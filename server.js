@@ -9,15 +9,22 @@ dotenv.config();
 console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
 
 
-// Connect to MongoDB
 connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:8080",
+    "http://13.233.194.64"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Later we will add: auth routes, admin routes, vendor routes, etc.
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/vendors", require("./routes/vendorRoutes"));
