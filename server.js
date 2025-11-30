@@ -3,11 +3,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-// Load environment variables
 dotenv.config();
 
 console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
-
 
 connectDB();
 
@@ -26,7 +24,6 @@ app.use((req, res, next) => {
 });
 
 
-
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
@@ -34,18 +31,12 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/vendors", require("./routes/vendorRoutes"));
 app.use("/api/upload", require("./routes/uploadRoutes"));
 app.use("/api/categories", require("./routes/productCategoryRoutes"));
-
-
-
-
+app.use("/api/location", require("./routes/locationRoutes"));
 
 // Health check endpoint (to verify server works)
 app.get("/", (req, res) => {
   res.send("Vendor Portal Backend Running Successfully 🚀");
 });
-
-
-
 
 // Start the server
 app.listen(process.env.PORT, () => {
