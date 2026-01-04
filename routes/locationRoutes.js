@@ -3,7 +3,6 @@ const { State, City } = require("country-state-city");
 
 const router = express.Router();
 
-// GET all states in India
 router.get("/states", (req, res) => {
   try {
     const states = State.getStatesOfCountry("IN");
@@ -14,7 +13,6 @@ router.get("/states", (req, res) => {
   }
 });
 
-// GET cities of a specific state
 router.get("/cities/:stateCode", (req, res) => {
   try {
     const { stateCode } = req.params;

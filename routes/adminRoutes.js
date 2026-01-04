@@ -5,10 +5,6 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
-/**
- * CREATE NEW ADMIN USER
- * Only logged-in admins can add another admin
- */
 router.post("/create-admin", auth, async (req, res) => {
   const { username, password } = req.body;
 
@@ -33,11 +29,6 @@ router.post("/create-admin", auth, async (req, res) => {
   res.json({ message: "Admin created successfully" });
 });
 
-
-/**
- * RESET PASSWORD FOR ANY ADMIN
- * Only logged-in admin can reset another admin's password
- */
 router.put("/reset-password", auth, async (req, res) => {
   const { username, newPassword } = req.body;
 
@@ -60,9 +51,6 @@ router.put("/reset-password", auth, async (req, res) => {
 });
 
 
-/**
- * GET ALL ADMINS (optional — useful for admin list page)
- */
 router.get("/all-admins", auth, async (req, res) => {
   const users = await User.find({}, { passwordHash: 0 });  // hide passwords
   res.json(users);
