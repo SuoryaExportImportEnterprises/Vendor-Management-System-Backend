@@ -30,7 +30,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/vendors", require("./routes/vendorRoutes"));
 app.use("/api/upload", require("./routes/uploadRoutes"));
-app.use("/api/categories", require("./routes/productCategoryRoutes"));
+//app.use("/api/categories", require("./routes/productCategoryRoutes"));
 app.use("/api/location", require("./routes/locationRoutes"));
 
 // Health check endpoint (to verify server works)

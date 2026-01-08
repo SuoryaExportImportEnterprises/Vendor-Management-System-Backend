@@ -4,6 +4,23 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
+const normalizeVendor = (v) => ({
+  ...v._doc,
+
+  phones: v.phones?.length
+    ? v.phones
+    : v.phone
+    ? [v.phone]
+    : [],
+
+  emails: v.emails?.length
+    ? v.emails
+    : v.email
+    ? [v.email]
+    : [],
+});
+
+
 router.post("/", auth, async (req, res) => {
   try {
 
@@ -31,8 +48,9 @@ router.post("/", auth, async (req, res) => {
 
   otherAreaName: req.body.otherAreaName || undefined,
   gstNumber: req.body.gstNumber || undefined,
-  phone: req.body.phone || undefined,
-  email: req.body.email || undefined,
+phones: Array.isArray(req.body.phones) ? req.body.phones : [],
+emails: Array.isArray(req.body.emails) ? req.body.emails : [],
+
   priceRange: req.body.priceRange || undefined,
   visitingCardImageUrl: req.body.visitingCardImageUrl || undefined,
   productImageUrl: req.body.productImageUrl || undefined,
@@ -50,7 +68,7 @@ router.post("/", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
   try {
     const entries = await Vendor.find().sort({ createdAt: -1 });
-    res.json(entries);
+    res.json(entries.map(normalizeVendor));
   } catch (error) {
     console.error("Error fetching entries:", error);
     res.status(500).json({ message: "Failed to fetch entries" });
@@ -61,8 +79,8 @@ router.get("/:id", auth, async (req, res) => {
   try {
     const entry = await Vendor.findById(req.params.id);
     if (!entry) return res.status(404).json({ message: "Entry not found" });
+    res.json(normalizeVendor(entry));
 
-    res.json(entry);
   } catch (error) {
     console.error("Error fetching entry:", error);
     res.status(500).json({ message: "Failed to fetch entry" });
@@ -72,17 +90,22 @@ router.get("/:id", auth, async (req, res) => {
 
 router.put("/:id", auth, async (req, res) => {
   try {
-    const updated = await Vendor.findByIdAndUpdate(
+const updated = await Vendor.findByIdAndUpdate(
   req.params.id,
   {
     $set: {
       ...req.body,
+      phones: Array.isArray(req.body.phones) ? req.body.phones : [],
+      emails: Array.isArray(req.body.emails) ? req.body.emails : [],
       visitingCardImageUrl: req.body.visitingCardImageUrl || undefined,
       productImageUrl: req.body.productImageUrl || undefined,
-    }
+    },
   },
   { new: true }
 );
+
+res.json({ message: "Vendor entry updated", data: normalizeVendor(updated) });
+
 
 
     if (!updated) return res.status(404).json({ message: "Entry not found" });

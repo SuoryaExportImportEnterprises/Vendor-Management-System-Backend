@@ -11,8 +11,15 @@ const VendorSchema = new mongoose.Schema(
     otherAreaName: { type: String }, 
 
     gstNumber: { type: String },
-    phone: { type: String },
-    email: { type: String },
+    phones: {
+      type: [String],
+      default: [],
+   },
+   emails: {
+    type: [String],
+    default: [],
+   },
+
 
     priceRange: { type: String },
     visitingCardImageUrl: { type: String },
