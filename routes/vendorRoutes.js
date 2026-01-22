@@ -38,7 +38,17 @@ router.post("/", auth, async (req, res) => {
 }
 
 
-    const newEntry = new Vendor({
+const phones =
+  Array.isArray(req.body.phones) && req.body.phones.length
+    ? req.body.phones
+    : [];
+
+const emails =
+  Array.isArray(req.body.emails) && req.body.emails.length
+    ? req.body.emails
+    : [];
+
+const newEntry = new Vendor({
   vendorName: req.body.vendorName,
   companyName: req.body.companyName,
   vendorState: req.body.vendorState,
@@ -48,8 +58,10 @@ router.post("/", auth, async (req, res) => {
 
   otherAreaName: req.body.otherAreaName || undefined,
   gstNumber: req.body.gstNumber || undefined,
-phones: Array.isArray(req.body.phones) ? req.body.phones : [],
-emails: Array.isArray(req.body.emails) ? req.body.emails : [],
+
+ 
+  ...(phones && { phones }),
+  ...(emails && { emails }),
 
   priceRange: req.body.priceRange || undefined,
   visitingCardImageUrl: req.body.visitingCardImageUrl || undefined,
@@ -95,16 +107,24 @@ const updated = await Vendor.findByIdAndUpdate(
   {
     $set: {
       ...req.body,
-      phones: Array.isArray(req.body.phones) ? req.body.phones : [],
-      emails: Array.isArray(req.body.emails) ? req.body.emails : [],
+      phones: Array.isArray(req.body.phones)
+  ? req.body.phones
+  : req.body.phone
+  ? [req.body.phone]
+  : [],
+
+emails: Array.isArray(req.body.emails)
+  ? req.body.emails
+  : req.body.email
+  ? [req.body.email]
+  : [],
+
       visitingCardImageUrl: req.body.visitingCardImageUrl || undefined,
       productImageUrl: req.body.productImageUrl || undefined,
     },
   },
   { new: true }
 );
-
-res.json({ message: "Vendor entry updated", data: normalizeVendor(updated) });
 
 
 

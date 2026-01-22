@@ -27,6 +27,8 @@ const VendorSchema = new mongoose.Schema(
 
     createdAt: { type: Date, default: Date.now },
   },
-  { strict: true }
+  { strict: true, 
+    minimize: false
+  }
 );
 module.exports = mongoose.model("Vendor", VendorSchema);
