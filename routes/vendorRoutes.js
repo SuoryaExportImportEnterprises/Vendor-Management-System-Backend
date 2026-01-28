@@ -18,6 +18,8 @@ const normalizeVendor = (v) => ({
     : v.email
     ? [v.email]
     : [],
+
+    website: v.website || "",
 });
 
 
@@ -62,6 +64,9 @@ const newEntry = new Vendor({
  
   ...(phones && { phones }),
   ...(emails && { emails }),
+
+  website: req.body.website || undefined,
+
 
   priceRange: req.body.priceRange || undefined,
   visitingCardImageUrl: req.body.visitingCardImageUrl || undefined,
@@ -118,6 +123,9 @@ emails: Array.isArray(req.body.emails)
   : req.body.email
   ? [req.body.email]
   : [],
+
+  website: req.body.website || undefined,
+
 
       visitingCardImageUrl: req.body.visitingCardImageUrl || undefined,
       productImageUrl: req.body.productImageUrl || undefined,

@@ -20,6 +20,7 @@ const VendorSchema = new mongoose.Schema(
     default: [],
    },
 
+    website: { type: String },
 
     priceRange: { type: String },
     visitingCardImageUrl: { type: String },
